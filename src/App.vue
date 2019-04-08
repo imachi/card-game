@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="card-area" v-for="(cardLines, index) in cards" :key="index">
+    <div class="card-area" v-for="(cardLines, index) in shuffledCards" :key="index">
       <template v-for="(card, index) in cardLines">
         <div class="card-item" @click="onClickCard(card)" :class="{ 'is-display-hidden': !card.existence }" :key="index">
           <CardItems :card="card"></CardItems>
@@ -15,6 +15,15 @@
 <script>
 import CardItems from './components/card_item';
 import CardKeep from './components/card_keep';
+
+const shuffle = ([...arr]) => {
+    let m = arr.length;
+    while (m) {
+      const i = Math.floor(Math.random() * m--);
+      [arr[m], arr[i]] = [arr[i], arr[m]];
+    }
+    return arr;
+  };
 
 function sleep(time) {
   return new Promise(resolve => {
@@ -34,32 +43,23 @@ export default {
         [{mark: "♠︎", number: 1, isFront: false, existence: true}, {mark: "♠︎", number: 2, isFront: false, existence: true}, {mark: "♠︎", number: 3, isFront: false, existence: true}, {mark: "♠︎", number: 4, isFront: false, existence: true}, {mark: "♠︎", number: 5, isFront: false, existence: true}, {mark: "♠︎", number: 6, isFront: false, existence: true}, {mark: "♠︎", number: 7, isFront: false, existence: true}, {mark: "♠︎", number: 8, isFront: false, existence: true}, {mark: "♠︎", number: 9, isFront: false, existence: true}, {mark: "♠︎", number: 10, isFront: false, existence: true}, {mark: "♠︎", number: 11, isFront: false, existence: true}, {mark: "♠︎", number: 12, isFront: false, existence: true}, {mark: "♠︎", number: 13, isFront: false, existence: true}],
         [{mark: "♧", number: 1, isFront: false, existence: true}, {mark: "♧", number: 2, isFront: false, existence: true}, {mark: "♧", number: 3, isFront: false, existence: true}, {mark: "♧", number: 4, isFront: false, existence: true}, {mark: "♧", number: 5, isFront: false, existence: true}, {mark: "♧", number: 6, isFront: false, existence: true}, {mark: "♧", number: 7, isFront: false, existence: true}, {mark: "♧", number: 8, isFront: false, existence: true}, {mark: "♧", number: 9, isFront: false, existence: true}, {mark: "♧", number: 10, isFront: false, existence: true}, {mark: "♧", number: 11, isFront: false, existence: true}, {mark: "♧", number: 12, isFront: false, existence: true}, {mark: "♧", number: 13, isFront: false, existence: true}]
       ],
+      shuffledCards: [],
       selectedCards: [],
     }
   },
-  created() {
-    let array;
-    for(var item = 0; this.cards.length > item; item++) {
-      array = this.cards[item];
 
-      for(var l = array.lengtn -1; l > 0; l--) {
-        const m = Math.floor(Math.random() * (i +1));
-        [array[m], array[l]] = [array[l], array[m]]
-        return array;
-      }
-      console.log(array);
-    }
-    
-    const cardRow = [this.cards[0][0], this.cards[1][0], this.cards[2][0], this.cards[3][0]];
-    // TODO newAryをシャッフル
-    this.cards[0, 0] = cardRow[0, 0];
-    this.cards[1, 0] = cardRow[1, 0];
-    this.cards[2, 0] = cardRow[2, 0];
-    this.cards[3, 0] = cardRow[3, 0];
-  },
   components: {
     CardItems,
   },
+
+  created() {
+    const shuffledCards = shuffle(this.cards.flat());
+    this.shuffledCards[0] = [...shuffledCards].splice(0, 13); 
+    this.shuffledCards[1] = [...shuffledCards].splice(13, 13); 
+    this.shuffledCards[2] = [...shuffledCards].splice(26, 13); 
+    this.shuffledCards[3] = [...shuffledCards].splice(39, 13); 
+  }, 
+
   methods: {
     async onClickCard(card) {
       card.isFront = !card.isFront;
@@ -83,9 +83,6 @@ export default {
       }
     },
   },
-  mounted: {
-
-  }
 }
 </script>
 
