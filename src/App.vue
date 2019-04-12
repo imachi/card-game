@@ -1,13 +1,15 @@
 <template>
-  <div id="app">
+  <div id="app" :class="{isLock: locking}">
     <div class="card-area" v-for="(cardLines, index) in shuffledCards" :key="index">
       <template v-for="(card, index) in cardLines">
         <div class="card-item" @click="onClickCard(card)" :class="{ 'is-display-hidden': !card.existence }" :key="index">
           <CardItems :card="card"></CardItems>
         </div>
       </template>
-      </div>
-    <CardKeep></CardKeep>
+    </div>
+    <div class="my-card">
+      <CardKeep :myCards="myCards"></CardKeep>
+    </div>
   </div>
 </template>
 
@@ -45,11 +47,14 @@ export default {
       ],
       shuffledCards: [],
       selectedCards: [],
+      myCards: [],
+      locking: false
     }
   },
 
   components: {
     CardItems,
+    CardKeep,
   },
 
   created() {
@@ -59,27 +64,29 @@ export default {
     this.shuffledCards[2] = [...shuffledCards].splice(26, 13); 
     this.shuffledCards[3] = [...shuffledCards].splice(39, 13); 
   }, 
-
   methods: {
     async onClickCard(card) {
       card.isFront = !card.isFront;
       this.selectedCards.push(card);
 
       if (this.selectedCards.length === 2) { // TODO カードの数字を比較
+        this.locking = true;
         const firstCard = this.selectedCards[0];
         const secondCard = this.selectedCards[1];
         
         if (firstCard.number === secondCard.number) {
-          await sleep(1000);
+          await sleep(2000);
           firstCard.existence = false;
           secondCard.existence = false;
+          this.myCards.push(firstCard, secondCard);
           this.selectedCards = [];
         } else {
-          await sleep(1000);
+          await sleep(2000);
           firstCard.isFront = false;
           secondCard.isFront = false;
           this.selectedCards = [];
         }
+        this.locking = false;
       }
     },
   },
@@ -101,5 +108,8 @@ export default {
 }
 .is-display-hidden {
   visibility: hidden;
+}
+.isLock {
+  pointer-events: none;
 }
 </style>
