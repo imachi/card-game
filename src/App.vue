@@ -2,7 +2,7 @@
   <div id="app" :class="{isLock: locking}">
     <div class="card-area" v-for="(cardLines, index) in shuffledCards" :key="index">
       <template v-for="(card, index) in cardLines">
-        <div class="card-item" @click="onClickCard(card)" :class="{ 'is-display-hidden': !card.existence }" :key="index">
+        <div class="card-item" @click="onClickCard(card)" :class="{ 'is-dis-hidden': !card.existence }" :key="index">
           <CardItems :card="card"></CardItems>
         </div>
       </template>
@@ -98,15 +98,15 @@ export default {
   display: flex;
 }
 .card-item {
-  width: 59px;
-  height: 86px;
+  min-width: 59px;
+  min-height: 86px;
   border: solid 1px black;
   border-radius: 5px;
   position: relative;
   margin: 10px;
   background-color: #fff;
 }
-.is-display-hidden {
+.is-dis-hidden {
   visibility: hidden;
 }
 .isLock {
